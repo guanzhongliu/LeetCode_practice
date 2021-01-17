@@ -7,21 +7,15 @@
 
 #include <iostream>
 
-#include "贪心/605.cpp"
+#include "贪心/763.cpp"
 using namespace std;
 
 int main() {
     Solution solution;
-    vector<int> a;
-//    a.insert(a.end(), 0);
-//    a.insert(a.end(), 0);
-    a.insert(a.end(), 0);
-    a.insert(a.end(), 0);
-    a.insert(a.end(), 1);
-    a.insert(a.end(), 0);
-    a.insert(a.end(), 1);
-//    a.insert(a.end(), 0);
-//    a.insert(a.end(), 0);
-//    a.insert(a.end(), 0);
-    cout << solution.canPlaceFlowers(a, 1) << endl;
+    string s = "aaacbbb";
+    vector<int> ans = solution.partitionLabels(s);
+    int a = ans.size();
+    for(int i = 0; i < a; i++)
+    cout << ans[i] << ' ';
+    return 0;
 }

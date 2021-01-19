@@ -15,7 +15,7 @@ accounts = [["John", "johnsmith@mail.com", "john00@mail.com"], ["John", "johnnyb
             ["John", "johnsmith@mail.com", "john_newyork@mail.com"], ["Mary", "mary@mail.com"]]
 
 
-class UnionFind:
+class UnionFind():
     def __init__(self, n) -> None:
         super().__init__()
         self.head = list(range(n))

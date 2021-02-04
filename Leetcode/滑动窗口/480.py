@@ -91,17 +91,81 @@ class DualHeap:
     def getMedian(self) -> float:
         return float(-self.small[0]) if self.k % 2 == 1 else (-self.small[0] + self.large[0]) / 2
 
+class DualHeap_2:
+    def __init__(self, k) -> None:
+        self.large = list()
+        self.small = list()
+        self.large_size = 0
+        self.small_size = 0
+        self.k = k
+        self.delayed = collections.Counter()
+    
+    def insert(self, num):
+        if not self.small or num <= -self.small[0]:
+            heapq.heappush(self.small, -num)
+            self.small_size += 1
+        else:
+            heapq.heappush(self.large, num)
+            self.large_size += 1
+        self.makeBalance()
+
+    def makeBalance(self):
+        if self.large_size > self.small_size:
+            heapq.heappush(self.small, -heapq.heappop(self.large))
+            self.small_size += 1
+            self.large_size -= 1
+            self.prune(self.large)
+        elif self.small_size > self.large_size + 1:
+            heapq.heappush(self.large, -heapq.heappop(self.small))
+            self.small_size -= 1
+            self.large_size += 1
+            self.prune(self.small)
+    
+    def delete(self, num):
+        self.delayed[num] += 1
+        if num <= -self.small[0]:
+            self.small_size -= 1
+            if num == -self.small[0]:
+                self.prune(self.small)
+        else:
+            self.large_size -= 1
+            if num == self.large[0]:
+                self.prune(self.large)
+        self.makeBalance()
+    
+    def prune(self, heap: List[int]):
+        while heap:
+            num = -heap[0] if heap is self.small else heap[0]
+            if num in self.delayed:
+                self.delayed[num] -= 1
+                if self.delayed[num] == 0:
+                    self.delayed.pop(num)
+                heapq.heappop(heap)
+            else:
+                break
+
+    def getMedian(self):
+        print(self.small, self.large, self.delayed)
+        return float(-self.small[0]) if self.k % 2 == 1 else (-self.small[0] + self.large[0]) / 2
+
+
 
 class Solution:
     def medianSlidingWindow(self, nums: List[int], k: int) -> List[float]:
-        dh = DualHeap(k)
+        dh = DualHeap_2(k)
         for num in nums[:k]:
             dh.insert(num)
         
         ans = [dh.getMedian()]
         for i in range(k, len(nums)):
             dh.insert(nums[i])
-            dh.erase(nums[i - k])
+            dh.delete(nums[i - k])
             ans.append(dh.getMedian())
         
         return ans
+
+
+s = Solution()
+nums = [1,3,-1,-3,5,3,6,7]
+k = 3
+print(s.medianSlidingWindow(nums, k))

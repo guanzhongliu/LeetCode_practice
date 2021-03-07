@@ -24,6 +24,8 @@ class Solution:
             return 'Alice'
         else:
             return 'Bob'
+        
+        
 
 s = Solution()
 print(s.stoneGameIII([1,2,3,-9]))
